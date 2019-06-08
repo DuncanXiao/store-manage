@@ -1,6 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'qs';
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
+import { fakeAccountLogin } from '@/services/auth';
+import { getFakeCaptcha } from '@/services/api'
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
@@ -55,10 +56,10 @@ export default {
       reloadAuthorized();
       const { redirect } = getPageQuery();
       // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
+      if (window.location.pathname !== '/store/login' && !redirect) {
         yield put(
           routerRedux.replace({
-            pathname: '/user/login',
+            pathname: '/store/login',
             search: stringify({
               redirect: window.location.href,
             }),
