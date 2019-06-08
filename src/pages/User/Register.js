@@ -50,10 +50,10 @@ class Register extends Component {
 
   componentDidUpdate() {
     const { form, register } = this.props;
-    const account = form.getFieldValue('mail');
+    const account = form.getFieldValue('account');
     if (register.status === 'ok') {
       router.push({
-        pathname: '/user/register-result',
+        pathname: '/store/register-result',
         state: {
           account,
         },
@@ -65,17 +65,21 @@ class Register extends Component {
     clearInterval(this.interval);
   }
 
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
-    message.warning(formatMessage({ id: 'app.login.verification-code-warning' }));
+  onGetCaptcha = async() => {
+    const { form } = this.props;
+    form.validateFields(['mobile'], (errors, v) => {
+      if (!errors) {
+        let count = 2;
+        this.setState({ count });
+        this.interval = setInterval(() => {
+          count -= 1;
+          this.setState({ count });
+          if (count === 0) {
+            clearInterval(this.interval);
+          }
+        }, 1000);
+      };
+    });
   };
 
   getPasswordStatus = () => {
@@ -185,19 +189,15 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('account', {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
-                },
-                {
-                  type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
-                },
+                  message: '不能为空',
+                }
               ],
             })(
-              <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
+              <Input size="large" placeholder='请输入账号' />
             )}
           </FormItem>
           <FormItem help={help}>

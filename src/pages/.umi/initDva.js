@@ -14,10 +14,10 @@ app.use(createLoading());
   app.use(plugin);
 });
 
-app.model({ namespace: 'global', ...(require('/Users/duncan/working/store-management/src/models/global.js').default) });
-app.model({ namespace: 'list', ...(require('/Users/duncan/working/store-management/src/models/list.js').default) });
-app.model({ namespace: 'login', ...(require('/Users/duncan/working/store-management/src/models/login.js').default) });
-app.model({ namespace: 'menu', ...(require('/Users/duncan/working/store-management/src/models/menu.js').default) });
-app.model({ namespace: 'project', ...(require('/Users/duncan/working/store-management/src/models/project.js').default) });
-app.model({ namespace: 'setting', ...(require('/Users/duncan/working/store-management/src/models/setting.js').default) });
-app.model({ namespace: 'user', ...(require('/Users/duncan/working/store-management/src/models/user.js').default) });
+app.model({ namespace: 'global', ...(require('/Users/duncan/working/school/store-manage/src/models/global.js').default) });
+app.model({ namespace: 'list', ...(require('/Users/duncan/working/school/store-manage/src/models/list.js').default) });
+app.model({ namespace: 'login', ...(require('/Users/duncan/working/school/store-manage/src/models/login.js').default) });
+app.model({ namespace: 'menu', ...(require('/Users/duncan/working/school/store-manage/src/models/menu.js').default) });
+app.model({ namespace: 'project', ...(require('/Users/duncan/working/school/store-manage/src/models/project.js').default) });
+app.model({ namespace: 'setting', ...(require('/Users/duncan/working/school/store-manage/src/models/setting.js').default) });
+app.model({ namespace: 'user', ...(require('/Users/duncan/working/school/store-manage/src/models/user.js').default) });

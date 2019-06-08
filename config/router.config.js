@@ -4,7 +4,7 @@ export default [
     path: '/store',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/store', redirect: '/user/login' },
+      { path: '/store', redirect: '/store/login' },
       { path: '/store/login', name: 'login', component: './User/Login' },
       { path: '/store/register', name: 'register', component: './User/Register' },
       {

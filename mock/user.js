@@ -72,7 +72,7 @@ export default {
       address: 'Sidney No. 1 Lake Park',
     },
   ],
-  'POST /api/login/account': (req, res) => {
+  'POST /auth/school-stores/login': (req, res) => {
     const { password, userName, type } = req.body;
     if (password === 'ant.design' && userName === 'admin') {
       res.send({
@@ -96,7 +96,7 @@ export default {
       currentAuthority: 'guest',
     });
   },
-  'POST /api/register': (req, res) => {
+  'POST /auth/school-stores/registry': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },
   'GET /api/500': (req, res) => {

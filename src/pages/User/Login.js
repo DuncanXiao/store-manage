@@ -159,7 +159,7 @@ class LoginPage extends Component {
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
             <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/user/register">
+            <Link className={styles.register} to="/store/register">
               <FormattedMessage id="app.login.signup" />
             </Link>
           </div>
