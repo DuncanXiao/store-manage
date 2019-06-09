@@ -100,6 +100,11 @@ export default [
         name: 'list',
         routes: [
           {
+            path: '/list/product-list',
+            name: 'searchproduct',
+            component: './List/ProductList',
+          },
+          {
             path: '/list/table-list',
             name: 'searchtable',
             component: './List/TableList',
