@@ -12,8 +12,8 @@ import {
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './ProductList.less';
 
-@connect(({ rule, loading }) => ({
-  rule,
+@connect(({ product, loading }) => ({
+  product,
   loading: loading.models.rule,
 }))
 @Form.create()
@@ -40,7 +40,6 @@ class ProductList extends PureComponent {
 
     return (
       <Form onSubmit={this.handleSearch} layout='inline'>
-
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <Form.Item label='产品名字'>
@@ -67,18 +66,23 @@ class ProductList extends PureComponent {
     )
   }
 
-  handleModalVisible = () => {
-    
+  createProduct = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/create',
+      payload: {},
+    });
   }
 
   render() {
+    console.log(this.props)
     return (
       <PageHeaderWrapper title="产品列表">
         <Card bordered={false}>
           <div className={styles.productList}>
             <div className={styles.productListSearchFrom}>{this.renderSearchFrom()}</div>
             <div className={styles.productListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.createProduct()}>
                 新建
               </Button>
             </div>

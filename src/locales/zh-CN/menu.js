@@ -16,6 +16,7 @@ export default {
   'menu.form.advancedform': '高级表单',
   'menu.list': '列表页',
   'menu.list.searchproduct': '查询产品',
+  'menu.list.productdetail': '产品详情',
   'menu.list.searchtable': '查询表格',
   'menu.list.basiclist': '标准列表',
   'menu.list.cardlist': '卡片列表',

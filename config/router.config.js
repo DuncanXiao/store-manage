@@ -105,6 +105,12 @@ export default [
             component: './List/ProductList',
           },
           {
+            path: '/list/product-list/:uuid',
+            name: 'productdetail',
+            hideInMenu: true,
+            component: './List/ProductDetail',
+          },
+          {
             path: '/list/table-list',
             name: 'searchtable',
             component: './List/TableList',
