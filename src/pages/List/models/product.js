@@ -1,4 +1,4 @@
-import { createProduct, updateProduct } from '@/services/store';
+import { createProduct, updateProduct, getProduct } from '@/services/store';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 
@@ -12,7 +12,7 @@ export default {
     *create({ payload }, { call, put }) {
       const response = yield call(createProduct, payload);
       yield put({
-        type: 'save',
+        type: 'saveItem',
         payload: response,
       });
       yield put(routerRedux.push(`/list/product-list/${response.uuid}`));
@@ -20,14 +20,21 @@ export default {
     *updateSave({ payload }, { call, put }) {
       const response = yield call(updateProduct, payload);
       yield put({
-        type: 'save',
+        type: 'saveItem',
         payload: response,
       });
       message.success('更新成功');
     },
+    *fetchItem({ payload }, { call, put }) {
+      const response = yield call(getProduct, payload);
+      yield put({
+        type: 'saveItem',
+        payload: response,
+      });
+    }
   },
   reducers: {
-    save(state, action) {
+    saveItem(state, action) {
       return {
         ...state,
         item: action.payload,

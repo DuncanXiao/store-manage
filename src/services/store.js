@@ -13,3 +13,10 @@ export async function updateProduct(params) {
     data: params,
   });
 }
+
+export async function getProduct(params) {
+  return request('/api/school-stores/1/product/4', {
+    method: 'GET',
+    data: params,
+  });
+}

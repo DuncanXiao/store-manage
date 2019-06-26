@@ -45,8 +45,20 @@ const createProduct = {
   published: false,
 }
 
-function getStoreProductItem(req) {
-  return req.body;
+function getStoreProductItem(req, res) {
+  const { uuid, storeUuid } = req.query;
+  res.send({
+    uuid,
+    storeUuid,
+    name: 'product-1',
+    price: '10',
+    description: '那是一种内在的东西，他们到达不了，也无法触及的',
+    tags: ['香辣'],
+    sellOut: false,
+    sale: 0,
+    imageUrl: '',
+    published: false,
+  });
 };
 
 function updateStoreProductItem(req, res) {

@@ -18,26 +18,25 @@ import styles from './ProductDetail.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-// {
-//   'uuid|+1': 1,
-//   storeUuid: '1',
-//   name: 'product-1',
-//   description: '好吃',
-//   price: '10',
-//   description: '那是一种内在的东西，他们到达不了，也无法触及的',
-//   type: '香辣',
-//   sellOut: false,
-//   sale: '100',
-//   imageUrl: '',
-//   published: true,
-// },
-@connect(({ project, product, loading }) => {
+const { Option } = Select;
+@connect(({ product, loading, tags }) => {
   return {
-  product,
-  updateLoading: loading.effects['product/updateSave'],
+  product: product.item,
+  storeTags: tags.list,
+  spinLoading: loading.effects['product/updateSave', 'product/fetchItem'],
 }})
 @Form.create()
 class ProductDetail extends PureComponent {
+
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/fetchItem',
+    })
+    dispatch({
+      type: 'tags/fetch',
+    })
+  }
 
   updateSave = (e) => {
     const { dispatch, form } = this.props;
@@ -52,7 +51,18 @@ class ProductDetail extends PureComponent {
   }
 
   render() {
-    const { updateLoading, form: { getFieldDecorator, getFieldValue } } = this.props;
+    const {
+      spinLoading,
+      form: { getFieldDecorator, getFieldValue },
+      product: {
+        name,
+        price,
+        description,
+        tags,
+        sellOut,
+      },
+      storeTags,
+    } = this.props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -71,15 +81,32 @@ class ProductDetail extends PureComponent {
       },
     };
     return (
-      <Spin spinning={updateLoading === true}>
+      <Spin spinning={spinLoading === true}>
         <PageHeaderWrapper
           title="产品信息"
           content="编辑当前产品信息，若点击发布按钮则会将当前产品更新客户端"
         >
           <Card bordered={false}>
             <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+              <FormItem {...formItemLayout} label='标签'>
+                {getFieldDecorator('tags', {
+                  initialValue: tags,
+                })(
+                  <Select
+                    mode="tags"
+                    style={{ width: '100%' }}
+                  >
+                    {
+                      storeTags.length > 0 ? storeTags.map(t => (
+                        <Option key={t}>{t}</Option>
+                      )) : ''
+                    }
+                  </Select>
+                )}
+              </FormItem>
               <FormItem {...formItemLayout} label='名字'>
                 {getFieldDecorator('name', {
+                  initialValue: name,
                   rules: [
                     {
                       required: true,
@@ -97,7 +124,9 @@ class ProductDetail extends PureComponent {
                 </span>
                 }
               >
-                {getFieldDecorator('description')(
+                {getFieldDecorator('description', {
+                  initialValue: description,
+                })(
                   <TextArea
                     style={{ minHeight: 32 }}
                     placeholder='描述产品信息'
@@ -109,7 +138,9 @@ class ProductDetail extends PureComponent {
                 {...formItemLayout}
                 label='价格'
               >
-                {getFieldDecorator('price')(
+                {getFieldDecorator('price', {
+                  initialValue: price,
+                })(
                   <InputNumber
                     placeholder='请输入价格'
                     min={0}
@@ -122,7 +153,7 @@ class ProductDetail extends PureComponent {
                 label='是否销售完'
               >
                 {getFieldDecorator('sellOut', {
-                    initialValue: false,
+                    initialValue: sellOut,
                   })(
                     <Radio.Group>
                       <Radio value={false}>
