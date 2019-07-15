@@ -1,22 +1,24 @@
 import mockjs from 'mockjs';
 
-const getStoreProductList = () => Object.assign({}, mockjs.mock({
-  'list|1-3': [
-    {
-      'uuid|+1': 1,
-      storeUuid: '1',
-      name: 'product-1',
-      description: '好吃',
-      price: '10',
-      description: '那是一种内在的东西，他们到达不了，也无法触及的',
-      type: '香辣',
-      sellOut: false,
-      sale: '100',
-      imageUrl: '',
-      published: true,
-    },
-  ]
-}), { count: 3 });
+const getStoreProductList = (req, res) => {
+  const products = mockjs.mock({
+    'list|40': [
+      {
+        'uuid|+1': 1,
+        storeUuid: '1',
+        'name|1': ['product-1', 'product-2', 'product-3', 'product-4'],
+        'price|1': ['1', '10', '2', '5', '4'],
+        description: '那是一种内在的东西，他们到达不了，也无法触及的',
+        tags: mockjs.Random.pick(['香辣', '折扣']),
+        sellOut: false,
+        sale: '100',
+        imageUrl: '',
+        'published|1': [true, false],
+      },
+    ],
+  });
+  res.send(products.list);
+};
 
 const getStore = [
   {
@@ -28,14 +30,13 @@ const getStore = [
     phone1: '',
     phone2: '',
     phone3: '',
-  }
+  },
 ];
 
 const createProduct = {
   uuid: '4',
   storeUuid: '',
   name: '',
-  description: '',
   price: '',
   description: '',
   type: '',
@@ -43,7 +44,7 @@ const createProduct = {
   sale: '',
   imageUrl: '',
   published: false,
-}
+};
 
 function getStoreProductItem(req, res) {
   const { uuid, storeUuid } = req.query;
@@ -59,7 +60,7 @@ function getStoreProductItem(req, res) {
     imageUrl: '',
     published: false,
   });
-};
+}
 
 function updateStoreProductItem(req, res) {
   res.send({ message: 'Ok' });

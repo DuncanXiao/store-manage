@@ -1,4 +1,4 @@
-import { createProduct, updateProduct, getProduct } from '@/services/store';
+import { createProduct, updateProduct, getProduct, getProductList } from '@/services/store';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 
@@ -31,6 +31,13 @@ export default {
         type: 'saveItem',
         payload: response,
       });
+    },
+    *fetchList({ payload }, { call, put }) {
+      const response = yield call(getProductList, payload);
+      yield put({
+        type: 'saveList',
+        payload: response,
+      });
     }
   },
   reducers: {
@@ -40,5 +47,11 @@ export default {
         item: action.payload,
       };
     },
+    saveList(state, action) {
+      return {
+        ...state,
+        list: action.payload,
+      };
+    }
   },
 }

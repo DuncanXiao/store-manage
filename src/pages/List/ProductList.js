@@ -1,37 +1,88 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import router from 'umi/router';
-import {
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Button,
-} from 'antd';
+import { Row, Col, Card, Form, Input, Button, Table } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './ProductList.less';
 
 @connect(({ product, loading }) => ({
-  product,
+  products: product.list,
   loading: loading.models.rule,
 }))
 @Form.create()
 class ProductList extends PureComponent {
   state = {
-    selectedRows: [],
+    selectedRowKeys: [],
+  };
+
+  columns = [
+    {
+      title: '产品名字',
+      dataIndex: 'name',
+    },
+    {
+      title: '价格',
+      sorter: (a, b) => parseInt(a.price, 2) - parseInt(b.price, 2),
+      dataIndex: 'price',
+    },
+    {
+      title: '状态',
+      dataIndex: 'published',
+      sorter: a => (a.published === true ? -1 : 1),
+      render: (published, record) => {
+        const button = published ? (
+          <Button type="primary" onClick={() => this.handlePublish(record)}>
+            发布
+          </Button>
+        ) : (
+          <Button onClick={() => this.handlePublish(record)}>未发布</Button>
+        );
+        return button;
+      },
+    },
+  ];
+
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/fetchList',
+      payload: {},
+    });
   }
+
+  handlePublish = record => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/updateSave',
+      payload: {
+        ...record,
+      },
+    });
+  };
 
   handleSearch = e => {
     e.preventDefault();
-
-    const { dispatch, form } = this.props;
-  }
+  };
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
-  }
+  };
+
+  createProduct = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'product/create',
+      payload: {},
+    });
+  };
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
+  formateProduct = products => {
+    return products.map((p, i) => ({ ...p, key: i }));
+  };
 
   renderSearchFrom() {
     const {
@@ -39,16 +90,16 @@ class ProductList extends PureComponent {
     } = this.props;
 
     return (
-      <Form onSubmit={this.handleSearch} layout='inline'>
+      <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <Form.Item label='产品名字'>
-              {getFieldDecorator('name')(<Input placeholder='请输入' />)}
+            <Form.Item label="产品名字">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label='产品名字'>
-              {getFieldDecorator('name')(<Input placeholder='请输入' />)}
+            <Form.Item label="产品名字">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
@@ -63,19 +114,24 @@ class ProductList extends PureComponent {
           </Col>
         </Row>
       </Form>
-    )
+    );
   }
 
-  createProduct = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'product/create',
-      payload: {},
-    });
-  }
+  renderTable = () => {
+    const { products } = this.props;
+    const { selectedRowKeys } = this.state;
+    const formatedProducts = this.formateProduct(products);
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+      hideDefaultSelections: true,
+    };
+    return (
+      <Table rowSelection={rowSelection} columns={this.columns} dataSource={formatedProducts} />
+    );
+  };
 
   render() {
-    console.log(this.props)
     return (
       <PageHeaderWrapper title="产品列表">
         <Card bordered={false}>
@@ -88,9 +144,11 @@ class ProductList extends PureComponent {
             </div>
           </div>
         </Card>
-        <div>hello</div>
+        <Card bordered={false}>
+          <div className={styles.productList}>{this.renderTable()}</div>
+        </Card>
       </PageHeaderWrapper>
-    )
+    );
   }
 }
 
